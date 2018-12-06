@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/160683478.svg)](https://zenodo.org/badge/latestdoi/160683478)
+
 # pymining
 image based data mining in python/numpy
 
@@ -20,3 +22,17 @@ tqdm - for nice progress bars in the permutation test
 
 
 ## Citations
+Please cite this repository if you use it for something!
+
+If you're using LaTeX, something like this will do the trick:
+```
+@misc{Green2018,
+  author = {Green, A.F.},
+  title = {pymining},
+  year = {2018},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://doi.org/10.5281/zenodo.2001661}},
+  version = {v0.1}
+}
+```
