@@ -68,39 +68,33 @@ def imagesTTest(doseData, statuses):
     Returns:
         - Tvalues: an array of the same size as one of the images which contains the per-voxel t values
     """
-    ## expand non 3D data
-    while len(doseData.shape) <  4:
-        doseData = np.expand_dims(doseData, axis=0)
+    noEventMean = np.zeros_like(doseData[...,0])
+    eventMean = np.zeros_like(doseData[...,0])# + np.finfo(float).eps
 
-    
-
-    noEventMean = np.zeros_like(doseData[:,:,:,0])
-    eventMean = np.zeros_like(doseData[:,:,:,0])# + np.finfo(float).eps
-
-    noEventStd = np.zeros_like(doseData[:,:,:,0])
-    eventStd = np.zeros_like(doseData[:,:,:,0])# + np.finfo(float).eps
+    noEventStd = np.zeros_like(doseData[...,0])
+    eventStd = np.zeros_like(doseData[...,0])# + np.finfo(float).eps
 
     eventCount = 0
     nonEventCount = 0
     for n, stat in enumerate(statuses):
         if stat == 1 and eventCount == 0:
             eventCount += 1.0
-            eventMean = doseData[:,:,:,n]
+            eventMean = doseData[...,n]
         elif stat == 1:
             eventCount += 1.0
             om = eventMean.copy()
-            eventMean = om + (doseData[:,:,:,n] - om)/eventCount
-            eventStd = eventStd + ((doseData[:,:,:,n] - om)*(doseData[:,:,:,n] - eventMean))
+            eventMean = om + (doseData[...,n] - om)/eventCount
+            eventStd = eventStd + ((doseData[...,n] - om)*(doseData[...,n] - eventMean))
 
 
         elif stat == 0 and nonEventCount == 0:
             nonEventCount += 1.0
-            noEventMean = doseData[:,:,:,n]
+            noEventMean = doseData[...,n]
         elif stat == 0:
             nonEventCount += 1.0
             om = noEventMean.copy()
-            noEventMean = om + (doseData[:,:,:,n] - om)/nonEventCount
-            noEventStd = noEventStd + ((doseData[:,:,:,n] - om)*(doseData[:,:,:,n] - noEventMean))
+            noEventMean = om + (doseData[...,n] - om)/nonEventCount
+            noEventStd = noEventStd + ((doseData[...,n] - om)*(doseData[...,n] - noEventMean))
 
     eventStd /= (eventCount**2)      
     noEventStd /= (nonEventCount**2)
